@@ -1,0 +1,53 @@
+.content-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+
+.app-wrapper{
+    @extend .content-view;
+    flex-direction: column;
+    height: 100vh;
+
+    header {
+        @extend .content-view;
+        height: 15vh;
+        background-color: #7395AE;
+        flex-direction: column;
+
+        span {
+            display: flex;
+            font-size: 20px;
+        }
+    }
+
+    .app-wrapper--body {
+        @extend .content-view;
+        height: 85vh;
+        background-color: #B0A295;
+        flex-direction: column;
+
+        form{
+         display: flex;
+         align-items: center;
+         gap : 15px;
+            label{
+             font-size: 20px;
+            }
+
+            input{
+                height: 30px;
+                border-radius: 10px;
+            }
+
+            select{
+                height: 50px;
+                border-radius: 10px;
+            }
+        }
+
+    }
+
+}

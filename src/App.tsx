@@ -1,24 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import { getActualCurrency } from './service/api';
+import { currencyTypes, IAppState } from './types/commonTypes';
 
-function App() {
+//components
+import Header from './components/Header';
+import CurrencyBody from './components/CurrencyBody';
+import Loader from './components/Loader';
+
+function App():JSX.Element {
+
+  const [appState, setAppState] = useState<IAppState>({
+    loading : true,
+    currencyData : {
+      USD: 0,
+      EUR: 0
+    },
+  })
+
+useEffect(() => {
+  const USD = getActualCurrency('USD')
+  .then(data => {
+     return data.data.info.rate
+  })
+  const EUR = getActualCurrency('EUR')
+  .then(data => {
+     return data.data.info.rate
+  })
+
+  Promise.all([USD, EUR])
+  .then(data => {
+    setAppState({
+      ...appState, currencyData : {
+        USD: data[0],
+        EUR: data[1]
+      },
+      loading : false
+    })
+  })
+},[])
+
+ if (appState.loading) {
+  return(
+    <>
+    <Loader/>
+    </>
+  )
+ }
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-wrapper">
+      <Header props={appState}/>
+      <CurrencyBody/>
     </div>
   );
 }
